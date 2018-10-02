@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,19 +7,24 @@ using System.Threading;
 
 namespace CoffeeManASCII
 {
+    class Skeleton
+    {
+
+    }
     class Coffee
     {
         Random ran = new Random();
         public void buildCoffee()
         {
-            int rows = ran.Next(10, 30);
-            int columns = ran.Next(10, 30);
             while (true)
             {
-            int percent = 0;
-            float steam = 0;
-            while (percent <= 100)
-            {
+                float percent = 0;
+                float steam = 0;
+                float interval = ran.Next(3, 10) / 10f;
+                int rows = ran.Next(10, 30);
+                int columns = ran.Next(5, 30);
+                while (percent <= 100)
+                {
                 Console.Clear();
                 string coffee = "";
                 for (int i = 0; i < Math.Round(rows / 2f); i++) //Steam
@@ -73,14 +78,30 @@ namespace CoffeeManASCII
                 {
                     coffee += "▓";
                 }
-                percent += 2;
+                percent += interval;
                 Console.WriteLine(coffee);
                 Thread.Sleep(200);
             }
             Console.WriteLine("");
             Console.WriteLine("Please Refill Coffee");
-            Console.ReadKey();
             Console.WriteLine("Thank You");
+            }
+        }
+
+        public void sineWave()
+        {
+            int i = 0;
+            Console.ForegroundColor = ConsoleColor.Red;
+            while (true)
+            {
+                float rad = (float)(i * (Math.PI / 180f));
+                for (int j = 0; j < (32 * Math.Sin(Math.Pow(rad, 1.7))) + 64; j++)
+                {
+                    Console.Write(" ");
+                }
+                Console.WriteLine("█");
+                Thread.Sleep(25);
+                i += 3;
             }
         }
     }
@@ -90,8 +111,18 @@ namespace CoffeeManASCII
         {
             Random ran = new Random();
             Coffee coffee = new Coffee();
-            Thread buildACoffee = new Thread(new ThreadStart(coffee.buildCoffee));
-            buildACoffee.Start();
+            Console.WriteLine("C or S?");
+            string input = Console.ReadLine();
+            if (input.ToLower() == "c")
+            {
+                Thread buildACoffee = new Thread(new ThreadStart(coffee.buildCoffee));
+                buildACoffee.Start();
+            }
+            else
+            {
+                Thread sinewave = new Thread(new ThreadStart(coffee.sineWave));
+                sinewave.Start();
+            }
 
         }
     }
